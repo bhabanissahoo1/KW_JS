@@ -44,6 +44,23 @@ function getResultLevel(message) {
     return "warning";
 }
 
+// Note :  customStringify function defined for processing huge array of objects.
+// customStringify function returns stringified data.
+function customStringify(value) {
+	if(value){
+		if ((Array.isArray(value) || value instanceof Array) && value.length>0) {
+        var out="[ ";	
+        for(var indx=0;indx<value.length-1;indx++){
+			out+=JSON.stringify(value[indx],null,2)+",";
+        }
+		out+=JSON.stringify(value[value.length-1],null,2);
+        out+=" ]";
+        return out;
+		}
+	}
+    return JSON.stringify(value);
+}
+
 //------------------------------------------------------------------------------
 // Public Interface
 //------------------------------------------------------------------------------
@@ -280,9 +297,29 @@ module.exports = function (results, data) {
             sarifLog.runs[0].tool.driver.rules.push(rule);
         });
     }
-
-    return JSON.stringify(sarifLog,
-        null, // replacer function
-        2     // # of spaces for indents
-    );
+	// Note : Below code is commented for the huge array objects are broken while calling JSON.stringify() function.
+    //return JSON.stringify(sarifLog,
+    //    null, // replacer function
+    //    2     // # of spaces for indents
+    //);
+	// Note : Below code is provided instead of the previous code where individual arrays are passed to a custom stringify function (customStringify).
+	var rez_out = "{    \"version\": \"2.1.0\",\"$schema\": \"http://json.schemastore.org/sarif-2.1.0-rtm.4\",      \"runs\": [          {   ";
+	if(sarifLog.runs[0].tool){
+		rez_out +="	\"tool\" : ";
+		rez_out += customStringify(sarifLog.runs[0].tool);
+	}
+	if(sarifLog.runs[0].artifacts){
+		rez_out +=", \"artifacts\" :";
+		rez_out += customStringify(sarifLog.runs[0].artifacts);
+	}
+	if(sarifLog.runs[0].results){
+		rez_out +=", \"results\" :";
+		rez_out += customStringify(sarifLog.runs[0].results);
+	}
+	if(sarifLog.runs[0].invocations){
+		rez_out +=", \"invocations\" :";
+		rez_out += customStringify(sarifLog.runs[0].invocations);
+	}
+	rez_out += "}               ]}    ";
+	return rez_out;
 };
