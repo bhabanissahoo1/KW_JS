@@ -48,15 +48,15 @@ function getResultLevel(message) {
 // customStringify function returns stringified data.
 function customStringify(value) {
 	if(value){
-		if ((Array.isArray(value) || value instanceof Array) && value.length>0) {
-        var out="[ ";	
-        for(var indx=0;indx<value.length-1;indx++){
-			out+=JSON.stringify(value[indx],null,2)+",";
-        }
-		out+=JSON.stringify(value[value.length-1],null,2);
-        out+=" ]";
-        return out;
-		}
+	   if ((Array.isArray(value) || value instanceof Array) && value.length>0) {
+       var out="[ ";	
+       for(var indx=0;indx<value.length-1;indx++){
+		   out+=JSON.stringify(value[indx],null,2)+",";
+       }
+	   out+=JSON.stringify(value[value.length-1],null,2);
+       out+=" ]";
+       return out;
+	   }
 	}
     return JSON.stringify(value);
 }
@@ -277,7 +277,7 @@ module.exports = function (results, data) {
         });
     }
 
-    // Per the SARIF spec ยง3.14.23, run.results must be present even if there are no results.
+    // Per the SARIF spec ง3.14.23, run.results must be present even if there are no results.
     // This provides a positive indication that the run completed and no results were found.
     sarifLog.runs[0].results = sarifResults;
 
@@ -305,20 +305,20 @@ module.exports = function (results, data) {
 	// Note : Below code is provided instead of the previous code where individual arrays are passed to a custom stringify function (customStringify).
 	var rez_out = "{    \"version\": \"2.1.0\",\"$schema\": \"http://json.schemastore.org/sarif-2.1.0-rtm.4\",      \"runs\": [          {   ";
 	if(sarifLog.runs[0].tool){
-		rez_out +="	\"tool\" : ";
-		rez_out += customStringify(sarifLog.runs[0].tool);
+	   rez_out +="	\"tool\" : ";
+	   rez_out += customStringify(sarifLog.runs[0].tool);
 	}
 	if(sarifLog.runs[0].artifacts){
-		rez_out +=", \"artifacts\" :";
-		rez_out += customStringify(sarifLog.runs[0].artifacts);
+	   rez_out +=", \"artifacts\" :";
+	   rez_out += customStringify(sarifLog.runs[0].artifacts);
 	}
 	if(sarifLog.runs[0].results){
-		rez_out +=", \"results\" :";
-		rez_out += customStringify(sarifLog.runs[0].results);
+	   rez_out +=", \"results\" :";
+	   rez_out += customStringify(sarifLog.runs[0].results);
 	}
 	if(sarifLog.runs[0].invocations){
-		rez_out +=", \"invocations\" :";
-		rez_out += customStringify(sarifLog.runs[0].invocations);
+	   rez_out +=", \"invocations\" :";
+	   rez_out += customStringify(sarifLog.runs[0].invocations);
 	}
 	rez_out += "}               ]}    ";
 	return rez_out;
