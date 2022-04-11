@@ -49,13 +49,13 @@ function getResultLevel(message) {
 function customStringify(value) {
 	if(value){
 	   if ((Array.isArray(value) || value instanceof Array) && value.length>0) {
-       var out="[ ";	
-       for(var indx=0;indx<value.length-1;indx++){
-		   out+=JSON.stringify(value[indx],null,2)+",";
-       }
-	   out+=JSON.stringify(value[value.length-1],null,2);
-       out+=" ]";
-       return out;
+           var out="[ ";	
+           for(var indx=0;indx<value.length-1;indx++){
+		       out+=JSON.stringify(value[indx],null,2)+",";
+           }
+	       out+=JSON.stringify(value[value.length-1],null,2);
+           out+=" ]";
+           return out;
 	   }
 	}
     return JSON.stringify(value);
